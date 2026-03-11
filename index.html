@@ -26,56 +26,8 @@
   --indigo:#7c6aff;
 }
 
-/* Пример использования переменных */
-#header {
-  background: var(--bg2);
-  border-bottom: 1px solid var(--border);
-}
-
-.h-icon {
-  color: var(--accent);
-}
-
-.nav-btn.active .nav-label {
-  color: var(--accent);
-}
-
-.send-btn.on {
-  background: var(--accent);
-  box-shadow: 0 0 20px rgba(232,115,90,.35);
-}
-
-.gen-btn.on {
-  background: linear-gradient(135deg, var(--accent), var(--accent2));
-  color: #fff;
-  box-shadow: 0 4px 28px rgba(232,115,90,.3);
-}
-
-.post-insight p {
-  color: var(--purple);
-}
-
-.post-cta {
-  color: var(--blue);
-}
-
-.article-divider {
-  background: var(--green);
-}
-
-.script-hook-label {
-  color: var(--accent);
-}
-
-.script-time {
-  color: var(--accent);
-}
-
-.script-cta {
-  color: var(--green);
-}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-html,body{height:100%;background:var(--bg);color:var(--text);font-family:Georgia,serif;overflow:hidden}
+html,body{height:100%;background:var(–bg);color:var(–text);font-family:Georgia,serif;overflow:hidden}
 ::-webkit-scrollbar{display:none}
 
 /* ── LAYOUT ── */
@@ -255,7 +207,9 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:Georgia
         <textarea id="msgInput" rows="1" placeholder="Напиши идею или вопрос…" oninput="onMsgInput()" onkeydown="onMsgKey(event)"></textarea>
       </div>
       <button class="send-btn" id="sendBtn" onclick="sendMsg()">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M22 2L11 13M22 2L15 22l-4-9-9-4 20-7z" stroke="#555" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" id="sendArrow"/></svg>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+          <path d="M22 2L11 13M22 2L15 22l-4-9-9-4 20-7z" stroke="#555" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" id="sendArrow"/>
+        </svg>
       </button>
     </div>
   </div>
@@ -328,16 +282,16 @@ var AGENTS = [
 var FORMATS = [
   {id:"post",    icon:"✍", label:"Пост",   color:"#c678dd",
    system:"Пиши ТОЛЬКО по-русски. Формат строго:\nHOOK: [крючок ≤10 слов]\nBODY: [текст 80-110 слов]\nINSIGHT: [одна мысль-инсайт]\nCTA: [призыв к действию]\nTAGS: [5 хэштегов]",
-   prompt:function(t){return"Создай Telegram/Instagram пост на тему: "+t}},
+   prompt:function(t){return "Создай Telegram/Instagram пост на тему: "+t}},
   {id:"thread",  icon:"⬡", label:"Thread", color:"#4a9eff",
    system:"Пиши ТОЛЬКО по-русски. Формат строго:\nTITLE: [тема]\nT1: [крючок]\nT2: [развитие]\nT3: [факт/история]\nT4: [инсайт]\nT5: [вывод + CTA]",
-   prompt:function(t){return"Напиши тред на тему: "+t}},
+   prompt:function(t){return "Напиши тред на тему: "+t}},
   {id:"article", icon:"◈", label:"Статья", color:"#4caf50",
    system:"Пиши ТОЛЬКО по-русски. Формат строго:\nHEADLINE: [заголовок]\nLEAD: [лид 30-40 слов]\nH2: [подзаголовок 1]\nP1: [абзац 60 слов]\nH2: [подзаголовок 2]\nP2: [абзац 60 слов]\nH2: [подзаголовок 3]\nP3: [абзац 60 слов]\nCLOSE: [закрывающий абзац]",
-   prompt:function(t){return"Напиши статью на тему: "+t}},
+   prompt:function(t){return "Напиши статью на тему: "+t}},
   {id:"script",  icon:"▶", label:"Скрипт", color:"#e8735a",
    system:"Пиши ТОЛЬКО по-русски. Формат строго:\nTITLE: [заголовок видео]\nHOOK: [первые 5 секунд]\n0:10 | [визуал] | [текст за кадром]\n0:30 | [визуал] | [текст за кадром]\n0:55 | [визуал] | [текст за кадром]\n1:20 | [визуал] | [текст за кадром]\nCTA: [финальный призыв]",
-   prompt:function(t){return"Напиши видеоскрипт на тему: "+t}},
+   prompt:function(t){return "Напиши видеоскрипт на тему: "+t}},
 ];
 
 var QUICK = ["Как монетизировать AI-контент?","Архитектура агентов","TON + контент = ?","Что автоматизировать первым?"];
@@ -417,7 +371,6 @@ function onMsgInput(){
   var arrow = document.getElementById("sendArrow");
   btn.classList.toggle("on", !!v && !chatBusy);
   if(arrow) arrow.setAttribute("stroke", v&&!chatBusy?"#fff":"#555");
-  // hide quick bar after typing
   document.getElementById("quickBar").style.display = v?"none":"flex";
 }
 
@@ -504,41 +457,36 @@ function addTyping(agent, id){
 
 function streamToEl(system, messages, elId, color, onDone){
   fetch("/api/chat",{
-    method:"POST",headers:{"Content-Type":"application/json"},
-    body:JSON.stringify({system:system,messages:messages})
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({system:system, messages:messages})
   }).then(function(res){
-    var reader=res.body.getReader(), dec=new TextDecoder(), full="", buf="";
-    var el=document.getElementById(elId);
-    if(el){
-      var agent=el.querySelector(".agent-body");
-      var ava=el.querySelector(".agent-ava");
-      agent.querySelector(".typing-dots")||agent.querySelector(".agent-msg");
-    }
+    var reader = res.body.getReader(), dec = new TextDecoder(), full = "", buf = "";
     function read(){
       reader.read().then(function(r){
         if(r.done){
-          var el2=document.getElementById(elId);
-          if(el2){
-            var dots=el2.querySelector(".typing-dots");
-            if(dots) dots.outerHTML='<div class="agent-msg"><p>'+formatText(full)+'</p></div>';
-            var cur=el2.querySelector(".cursor"); if(cur) cur.remove();
+          var el = document.getElementById(elId);
+          if(el){
+            var dots = el.querySelector(".typing-dots");
+            if(dots) dots.outerHTML = '<div class="agent-msg"><p>'+formatText(full)+'</p></div>';
+            var cur = el.querySelector(".cursor"); if(cur) cur.remove();
           }
           onDone(full); return;
         }
-        buf+=dec.decode(r.value,{stream:true});
-        var lines=buf.split("\n"); buf=lines.pop()||"";
+        buf += dec.decode(r.value,{stream:true});
+        var lines = buf.split("\n"); buf = lines.pop()||"";
         lines.forEach(function(line){
           if(!line.startsWith("data: ")) return;
-          var raw=line.slice(6).trim(); if(raw==="[DONE]") return;
+          var raw = line.slice(6).trim(); if(raw==="[DONE]") return;
           try{
-            var evt=JSON.parse(raw), t=(evt.delta&&evt.delta.text)||"";
+            var evt = JSON.parse(raw), t = (evt.delta&&evt.delta.text)||"";
             if(t){
-              full+=t;
-              var el3=document.getElementById(elId);
-              if(el3){
-                var dots=el3.querySelector(".typing-dots");
-                if(dots) dots.outerHTML='<div class="agent-msg"><p id="p-'+elId+'">'+formatText(full)+'<span class="cursor" style="background:'+color+'"></span></p></div>';
-                else{var p=el3.querySelector(".agent-msg p"); if(p) p.innerHTML=formatText(full)+'<span class="cursor" style="background:'+color+'"></span>';}
+              full += t;
+              var el2 = document.getElementById(elId);
+              if(el2){
+                var dots = el2.querySelector(".typing-dots");
+                if(dots) dots.outerHTML = '<div class="agent-msg"><p id="p-'+elId+'">'+formatText(full)+'<span class="cursor" style="background:'+color+'"></span></p></div>';
+                else{ var p = el2.querySelector(".agent-msg p"); if(p) p.innerHTML = formatText(full)+'<span class="cursor" style="background:'+color+'"></span>'; }
               }
               scrollBottom();
             }
@@ -549,157 +497,162 @@ function streamToEl(system, messages, elId, color, onDone){
     }
     read();
   }).catch(function(e){
-    var el=document.getElementById(elId);
-    if(el){var p=el.querySelector("p"); if(p) p.textContent="Ошибка: "+e.message;}
+    var el = document.getElementById(elId);
+    if(el){ var p = el.querySelector("p"); if(p) p.textContent = "Ошибка: "+e.message; }
     onDone("");
   });
 }
 
 function scrollBottom(){
-  var m=document.getElementById("messages");
-  m.scrollTop=m.scrollHeight;
+  var m = document.getElementById("messages");
+  m.scrollTop = m.scrollHeight;
 }
 
 // ── STUDIO ──
 function renderFmtBadges(){
-  var html="";
+  var html = "";
   FORMATS.forEach(function(f){
-    html+='<div class="fmt-badge" style="color:'+f.color+';background:'+f.color+'0e;border-color:'+f.color+'28">'
+    html += '<div class="fmt-badge" style="color:'+f.color+';background:'+f.color+'0e;border-color:'+f.color+'28">'
       +'<span>'+f.icon+'</span><span>'+f.label+'</span></div>';
   });
-  document.getElementById("fmtBadges").innerHTML=html;
+  document.getElementById("fmtBadges").innerHTML = html;
 }
 
 function renderExamples(){
-  var html="";
+  var html = "";
   EXAMPLES.forEach(function(ex){
-    html+='<button class="example-btn" onclick="setIdea(this)">'+ex+'</button>';
+    html += '<button class="example-btn" onclick="setIdea(this)">'+ex+'</button>';
   });
-  document.getElementById("exampleBtns").innerHTML=html;
+  document.getElementById("exampleBtns").innerHTML = html;
 }
 
 function setIdea(btn){
-  document.getElementById("ideaInput").value=btn.textContent;
+  document.getElementById("ideaInput").value = btn.textContent;
   onIdeaInput();
 }
 
 function onIdeaInput(){
-  var v=document.getElementById("ideaInput").value;
-  document.getElementById("ideaCount").textContent=v.length;
-  document.getElementById("genBtn").className="gen-btn"+(v.trim()?" on":"");
+  var v = document.getElementById("ideaInput").value;
+  document.getElementById("ideaCount").textContent = v.length;
+  document.getElementById("genBtn").className = "gen-btn"+(v.trim()?" on":"");
 }
 
 function renderFmtTabs(){
-  var html="";
+  var html = "";
   FORMATS.forEach(function(f){
-    html+='<button class="fmt-tab" id="tab-'+f.id+'" style="--tab-color:'+f.color+'" onclick="setFmt(\''+f.id+'\')">'
+    html += '<button class="fmt-tab" id="tab-'+f.id+'" style="--tab-color:'+f.color+'" onclick="setFmt(\''+f.id+'\')">'
       +'<span class="fmt-tab-icon" id="ti-'+f.id+'">'+f.icon+'</span>'
       +'<span class="fmt-tab-label">'+f.label.toUpperCase()+'</span>'
     +'</button>';
   });
-  document.getElementById("fmtTabs").innerHTML=html;
+  document.getElementById("fmtTabs").innerHTML = html;
 }
 
 function setFmt(id){
-  activeFmt=id;
+  activeFmt = id;
   FORMATS.forEach(function(f){
-    document.getElementById("tab-"+f.id).classList.toggle("active",f.id===id);
+    document.getElementById("tab-"+f.id).classList.toggle("active", f.id===id);
   });
   renderFmtContent();
-  var fmt=FORMATS.find(function(f){return f.id===id;});
-  if(fmt) document.getElementById("pubBtn").style.background=fmt.color;
+  var fmt = FORMATS.find(function(f){return f.id===id;});
+  if(fmt) document.getElementById("pubBtn").style.background = fmt.color;
 }
 
 function generate(){
-  var idea=document.getElementById("ideaInput").value.trim();
+  var idea = document.getElementById("ideaInput").value.trim();
   if(!idea) return;
-  currentIdea=idea;
-  studioStreams={}; studioDones={};
-  document.getElementById("resultPill").textContent=idea;
-  document.getElementById("studioResult").style.display="flex";
-  activeFmt="post";
+  currentIdea = idea;
+  studioStreams = {}; studioDones = {};
+  document.getElementById("resultPill").textContent = idea;
+  document.getElementById("studioResult").style.display = "flex";
+  activeFmt = "post";
   renderFmtTabs();
   document.getElementById("tab-post").classList.add("active");
-  document.getElementById("pubBtn").style.background=FORMATS[0].color;
+  document.getElementById("pubBtn").style.background = FORMATS[0].color;
   renderFmtContent();
 
   FORMATS.forEach(function(fmt){
     startSpinner(fmt.id, fmt.color);
     fetch("/api/chat",{
-      method:"POST",headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({system:fmt.system,messages:[{role:"user",content:fmt.prompt(idea)}]})
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({system:fmt.system, messages:[{role:"user", content:fmt.prompt(idea)}]})
     }).then(function(res){
-      var reader=res.body.getReader(),dec=new TextDecoder(),full="",buf="";
+      var reader = res.body.getReader(), dec = new TextDecoder(), full = "", buf = "";
       function read(){
         reader.read().then(function(r){
           if(r.done){
-            studioDones[fmt.id]=true;
-            stopSpinner(fmt.id,fmt.color);
+            studioDones[fmt.id] = true;
+            stopSpinner(fmt.id, fmt.color);
             if(activeFmt===fmt.id) renderFmtContent();
             return;
           }
-          buf+=dec.decode(r.value,{stream:true});
-          var lines=buf.split("\n");buf=lines.pop()||"";
+          buf += dec.decode(r.value,{stream:true});
+          var lines = buf.split("\n"); buf = lines.pop()||"";
           lines.forEach(function(line){
-            if(!line.startsWith("data: "))return;
-            var raw=line.slice(6).trim();if(raw==="[DONE]")return;
-            try{var evt=JSON.parse(raw),t=(evt.delta&&evt.delta.text)||"";
-              if(t){full+=t;studioStreams[fmt.id]=full;if(activeFmt===fmt.id)renderFmtContent();}
+            if(!line.startsWith("data: ")) return;
+            var raw = line.slice(6).trim(); if(raw==="[DONE]") return;
+            try{
+              var evt = JSON.parse(raw), t = (evt.delta&&evt.delta.text)||"";
+              if(t){ full += t; studioStreams[fmt.id] = full; if(activeFmt===fmt.id) renderFmtContent(); }
             }catch(e){}
           });
           read();
-        }).catch(function(){studioDones[fmt.id]=true;stopSpinner(fmt.id,fmt.color);});
+        }).catch(function(){studioDones[fmt.id]=true; stopSpinner(fmt.id,fmt.color);});
       }
       read();
     }).catch(function(e){
-      studioStreams[fmt.id]="Ошибка: "+e.message;
-      studioDones[fmt.id]=true;
-      stopSpinner(fmt.id,fmt.color);
+      studioStreams[fmt.id] = "Ошибка: "+e.message;
+      studioDones[fmt.id] = true;
+      stopSpinner(fmt.id, fmt.color);
       if(activeFmt===fmt.id) renderFmtContent();
     });
   });
 }
 
-function startSpinner(id,color){
-  var el=document.getElementById("ti-"+id);
-  if(!el)return;
-  el.innerHTML=el.textContent
+function startSpinner(id, color){
+  var el = document.getElementById("ti-"+id);
+  if(!el) return;
+  el.innerHTML = el.textContent
     +'<svg class="tab-spinner" width="36" height="36" viewBox="0 0 36 36">'
     +'<circle cx="18" cy="18" r="14" fill="none" stroke="'+color+'" stroke-width="2" stroke-dasharray="60 30" stroke-linecap="round"/>'
     +'</svg>';
 }
 
-function stopSpinner(id,color){
-  var el=document.getElementById("ti-"+id);
-  if(!el)return;
-  var icon=FORMATS.find(function(f){return f.id===id;});
-  el.innerHTML=(icon?icon.icon:"")
+function stopSpinner(id, color){
+  var el = document.getElementById("ti-"+id);
+  if(!el) return;
+  var icon = FORMATS.find(function(f){return f.id===id;});
+  el.innerHTML = (icon?icon.icon:"")
     +'<span class="tab-dot" style="background:'+color+'"></span>';
 }
 
 function renderFmtContent(){
-  var raw=studioStreams[activeFmt]||"";
-  var done=!!studioDones[activeFmt];
-  var html="";
-  var cur=done?"":'<span class="cursor" style="background:'+getFmtColor()+'"></span>';
+  var raw = studioStreams[activeFmt]||"";
+  var done = !!studioDones[activeFmt];
+  var html = "";
+  var cur = done ? '' : '<span class="cursor" style="background:'+getFmtColor()+'"></span>';
 
-  if(activeFmt==="post") html=renderPost(raw,cur);
-  else if(activeFmt==="thread") html=renderThread(raw,cur);
-  else if(activeFmt==="article") html=renderArticle(raw,cur);
-  else if(activeFmt==="script") html=renderScript(raw,cur);
+  if(activeFmt==="post")    html = renderPost(raw, cur);
+  else if(activeFmt==="thread")  html = renderThread(raw, cur);
+  else if(activeFmt==="article") html = renderArticle(raw, cur);
+  else if(activeFmt==="script")  html = renderScript(raw, cur);
 
-  document.getElementById("fmtContent").innerHTML=html||'<p style="color:#1e1e1e;font-size:14px;padding-top:20px">Генерация…</p>';
+  document.getElementById("fmtContent").innerHTML = html||'<p style="color:#1e1e1e;font-size:14px;padding-top:20px">Генерация…</p>';
 }
 
 function getFmtColor(){
-  var f=FORMATS.find(function(f){return f.id===activeFmt;});
-  return f?f.color:"#e8735a";
+  var f = FORMATS.find(function(f){return f.id===activeFmt;});
+  return f ? f.color : "#e8735a";
 }
 
-function gf(raw,k){var m=raw.match(new RegExp(k+":\\s*([^\\n]+)"));return m?m[1].trim():"";}
+function gf(raw, k){
+  var m = raw.match(new RegExp(k+":\\s*([^\\n]+)"));
+  return m ? m[1].trim() : "";
+}
 
-function renderPost(raw,cur){
-  var body=raw.replace(/HOOK:[^\n]*\n?|INSIGHT:[^\n]*\n?|CTA:[^\n]*\n?|TAGS:[^\n]*\n?|BODY:\s*/g,"").trim();
+function renderPost(raw, cur){
+  var body = raw.replace(/HOOK:[^\n]*\n?|INSIGHT:[^\n]*\n?|CTA:[^\n]*\n?|TAGS:[^\n]*\n?|BODY:\s*/g,"").trim();
   return '<div class="post-card">'
     +'<div class="post-header"><div class="post-ava">K</div><div><div class="post-uname">KULBATSKII</div><div class="post-time">только что</div></div></div>'
     +(gf(raw,"HOOK")?'<p class="post-hook">'+esc(gf(raw,"HOOK"))+'</p>':"")
@@ -710,11 +663,11 @@ function renderPost(raw,cur){
     +cur+'</div>';
 }
 
-function renderThread(raw,cur){
-  var tweets=["T1","T2","T3","T4","T5"].map(function(k){return gf(raw,k);}).filter(Boolean);
-  var html='';
+function renderThread(raw, cur){
+  var tweets = ["T1","T2","T3","T4","T5"].map(function(k){return gf(raw,k);}).filter(Boolean);
+  var html = '';
   tweets.forEach(function(t,i){
-    html+='<div class="thread-item">'
+    html += '<div class="thread-item">'
       +'<div style="display:flex;flex-direction:column;align-items:center">'
         +'<div class="thread-num">'+(i+1)+'</div>'
         +(i<tweets.length-1?'<div class="thread-line"></div>':"")
@@ -725,49 +678,49 @@ function renderThread(raw,cur){
   return html+cur;
 }
 
-function renderArticle(raw,cur){
-  var sections=[];
-  var re=/H2:\s*([^\n]+)\n(P\d):\s*([\s\S]+?)(?=H2:|CLOSE:|$)/g,m;
-  while((m=re.exec(raw))!==null) sections.push({h:m[1],p:m[3].replace(/P\d:\s*/,"").trim()});
-  var html='';
-  if(gf(raw,"HEADLINE")) html+='<h2 class="article-h1">'+esc(gf(raw,"HEADLINE"))+'</h2>';
-  if(gf(raw,"LEAD")) html+='<p class="article-lead">'+esc(gf(raw,"LEAD"))+'</p><div class="article-divider"></div>';
+function renderArticle(raw, cur){
+  var sections = [];
+  var re = /H2:\s*([^\n]+)\n(P\d):\s*([\s\S]+?)(?=H2:|CLOSE:|$)/g, m;
+  while((m=re.exec(raw))!==null) sections.push({h:m[1], p:m[3].replace(/P\d:\s*/,"").trim()});
+  var html = '';
+  if(gf(raw,"HEADLINE")) html += '<h2 class="article-h1">'+esc(gf(raw,"HEADLINE"))+'</h2>';
+  if(gf(raw,"LEAD"))     html += '<p class="article-lead">'+esc(gf(raw,"LEAD"))+'</p><div class="article-divider"></div>';
   sections.forEach(function(s){
-    html+='<p class="article-h2">'+esc(s.h)+'</p><p class="article-p">'+esc(s.p)+'</p>';
+    html += '<p class="article-h2">'+esc(s.h)+'</p><p class="article-p">'+esc(s.p)+'</p>';
   });
-  if(gf(raw,"CLOSE")) html+='<p class="article-close">'+esc(gf(raw,"CLOSE"))+'</p>';
+  if(gf(raw,"CLOSE")) html += '<p class="article-close">'+esc(gf(raw,"CLOSE"))+'</p>';
   return html+cur;
 }
 
-function renderScript(raw,cur){
-  var html='';
-  if(gf(raw,"TITLE")) html+='<p class="script-title">'+esc(gf(raw,"TITLE"))+'</p>';
-  if(gf(raw,"HOOK"))  html+='<div class="script-hook"><p class="script-hook-label">КРЮЧОК (0–5 сек)</p><p class="script-hook-text">'+esc(gf(raw,"HOOK"))+'</p></div>';
-  var lines=raw.split('\n');
+function renderScript(raw, cur){
+  var html = '';
+  if(gf(raw,"TITLE")) html += '<p class="script-title">'+esc(gf(raw,"TITLE"))+'</p>';
+  if(gf(raw,"HOOK"))  html += '<div class="script-hook"><p class="script-hook-label">КРЮЧОК (0–5 сек)</p><p class="script-hook-text">'+esc(gf(raw,"HOOK"))+'</p></div>';
+  var lines = raw.split('\n');
   lines.forEach(function(line){
-    var m=line.match(/^(\d{1,2}:\d{2})\s*\|\s*([^|]+)\s*\|\s*(.+)$/);
+    var m = line.match(/^(\d{1,2}:\d{2})\s*\|\s*([^|]+)\s*\|\s*(.+)$/);
     if(!m) return;
-    html+='<div class="script-row">'
+    html += '<div class="script-row">'
       +'<span class="script-time">'+esc(m[1])+'</span>'
       +'<div class="script-cell">'
         +'<p class="script-visual">📹 '+esc(m[2].trim())+'</p>'
         +'<p class="script-voice">🎙 '+esc(m[3].trim())+'</p>'
       +'</div></div>';
   });
-  if(gf(raw,"CTA")) html+='<div class="script-cta">🎯 '+esc(gf(raw,"CTA"))+'</div>';
+  if(gf(raw,"CTA")) html += '<div class="script-cta">🎯 '+esc(gf(raw,"CTA"))+'</div>';
   return html+cur;
 }
 
 function backToInput(){
-  document.getElementById("studioResult").style.display="none";
+  document.getElementById("studioResult").style.display = "none";
 }
 
 function copyResult(){
-  var raw=studioStreams[activeFmt]||"";
+  var raw = studioStreams[activeFmt]||"";
   navigator.clipboard.writeText(raw).then(function(){
-    var btn=document.getElementById("copyBtn");
-    btn.textContent="✓"; btn.style.color="#4caf50"; btn.style.borderColor="#4caf50";
-    setTimeout(function(){btn.textContent="⎘";btn.style.color="";btn.style.borderColor="";},1800);
+    var btn = document.getElementById("copyBtn");
+    btn.textContent = "✓"; btn.style.color = "#4caf50"; btn.style.borderColor = "#4caf50";
+    setTimeout(function(){ btn.textContent="⎘"; btn.style.color=""; btn.style.borderColor=""; }, 1800);
   });
 }
 
