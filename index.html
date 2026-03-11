@@ -6,12 +6,73 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
 <title>KULBATSKII OS</title>
 <style>
-:root{
-  --bg:#060606;--bg2:#0a0a0a;--bg3:#0e0e0e;--bg4:#111;
-  --border:#1a1a1a;--border2:#222;
-  --text:#f0ece4;--text2:#b0aca8;--text3:#555;--text4:#2a2a2a;
-  --accent:#e8735a;--accent2:#c4502a;
-  --green:#4caf50;--blue:#4a9eff;--purple:#c678dd;--gold:#e8c07d;--indigo:#7c6aff;
+:root {
+  --bg:#060606;
+  --bg2:#0a0a0a;
+  --bg3:#0e0e0e;
+  --bg4:#111;
+  --border:#1a1a1a;
+  --border2:#222;
+  --text:#f0ece4;
+  --text2:#b0aca8;
+  --text3:#555;
+  --text4:#2a2a2a;
+  --accent:#e8735a;
+  --accent2:#c4502a;
+  --green:#4caf50;
+  --blue:#4a9eff;
+  --purple:#c678dd;
+  --gold:#e8c07d;
+  --indigo:#7c6aff;
+}
+
+/* Пример использования переменных */
+#header {
+  background: var(--bg2);
+  border-bottom: 1px solid var(--border);
+}
+
+.h-icon {
+  color: var(--accent);
+}
+
+.nav-btn.active .nav-label {
+  color: var(--accent);
+}
+
+.send-btn.on {
+  background: var(--accent);
+  box-shadow: 0 0 20px rgba(232,115,90,.35);
+}
+
+.gen-btn.on {
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  color: #fff;
+  box-shadow: 0 4px 28px rgba(232,115,90,.3);
+}
+
+.post-insight p {
+  color: var(--purple);
+}
+
+.post-cta {
+  color: var(--blue);
+}
+
+.article-divider {
+  background: var(--green);
+}
+
+.script-hook-label {
+  color: var(--accent);
+}
+
+.script-time {
+  color: var(--accent);
+}
+
+.script-cta {
+  color: var(--green);
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html,body{height:100%;background:var(--bg);color:var(--text);font-family:Georgia,serif;overflow:hidden}
