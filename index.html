@@ -2,224 +2,151 @@
 
 <html lang="ru">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>KULBATSKII OS</title>
-  <style>
-    *{box-sizing:border-box;margin:0;padding:0}
-    body{background:#060606;font-family:Georgia,serif;color:#f0ece4;min-height:100vh}
-    #app{max-width:520px;margin:0 auto;padding:28px 18px 48px}
-    .header{margin-bottom:28px}
-    .logo{display:flex;align-items:center;gap:10px;margin-bottom:6px}
-    .logo-icon{color:#e8735a;font-size:24px}
-    .logo-text{color:#fff;font-size:20px;font-weight:800;letter-spacing:1px}
-    .subtitle{color:#2a2a2a;font-size:12px;letter-spacing:2px}
-    .key-box{background:#0a0a0a;border:1px solid #1a1a1a;border-radius:16px;padding:18px;margin-bottom:20px}
-    .key-label{color:#444;font-size:12px;letter-spacing:2px;margin-bottom:10px}
-    .key-row{display:flex;gap:8px}
-    input[type=password],textarea{background:#111;border:1px solid #1e1e1e;border-radius:10px;color:#f0ece4;font-size:14px;padding:10px 12px;outline:none;font-family:Georgia,serif}
-    input[type=password]{flex:1}
-    .btn-save{padding:10px 16px;background:#111;border:none;border-radius:10px;color:#333;font-size:13px;font-weight:700;cursor:pointer}
-    .btn-save.active{background:#e8735a;color:#fff}
-    .key-note{color:#1a1a1a;font-size:11px;margin-top:8px}
-    .input-box{background:#0e0e0e;border:1px solid #1a1a1a;border-radius:18px;padding:14px 16px;margin-bottom:12px}
-    textarea{width:100%;background:transparent;border:none;outline:none;color:#f0ece4;font-size:16px;line-height:1.75;resize:none;caret-color:#e8735a}
-    .hint{display:block;width:100%;text-align:left;background:transparent;border:1px solid #111;border-radius:12px;padding:10px 14px;color:#333;font-size:14px;cursor:pointer;font-family:Georgia,serif;line-height:1.5;margin-bottom:8px}
-    .hint:hover{border-color:#222;color:#555}
-    .btn-launch{width:100%;height:52px;border:none;border-radius:16px;margin-top:6px;background:#0e0e0e;color:#222;font-size:16px;font-weight:800;cursor:default;display:flex;align-items:center;justify-content:center;gap:10px}
-    .btn-launch.active{background:linear-gradient(135deg,#e8735a,#c4502a);color:#fff;cursor:pointer;box-shadow:0 4px 24px rgba(232,115,90,.3)}
-    .btn-reset{width:100%;margin-top:10px;padding:8px;background:transparent;border:none;color:#1e1e1e;font-size:12px;cursor:pointer}
-    .query-row{display:flex;gap:10px;margin-bottom:20px}
-    .query-pill{flex:1;background:#0a0a0a;border:1px solid #111;border-radius:12px;padding:8px 14px;overflow:hidden}
-    .query-text{color:#333;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-    .btn-new{padding:8px 14px;background:#0e0e0e;border:1px solid #111;border-radius:12px;color:#444;font-size:13px;cursor:pointer}
-    .cards{display:flex;flex-direction:column;gap:12px}
-    .card{background:#0a0a0a;border:1px solid #111;border-radius:18px;padding:18px 18px 20px;transition:border-color .4s}
-    .card-header{display:flex;align-items:center;gap:8px;margin-bottom:12px}
-    .card-emoji{font-size:20px}
-    .card-label{font-size:11px;font-weight:800;letter-spacing:3px}
-    .card-dot{width:6px;height:6px;border-radius:3px;display:inline-block;margin-left:4px;animation:pulse 1s ease-in-out infinite}
-    .card-done{color:#222;font-size:10px;margin-left:auto}
-    .card-text{font-size:15px;line-height:1.8;white-space:pre-wrap;min-height:20px;color:#b8b4ac}
-    .cursor{display:inline-block;width:2px;height:14px;vertical-align:text-bottom;margin-left:2px;animation:blink .7s step-end infinite}
-    @keyframes pulse{0%,100%{opacity:.3}50%{opacity:1}}
-    @keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
-  </style>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>KULBATSKII OS</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#060606;color:#f0ece4;font-family:Georgia,serif;padding:24px 18px 48px;max-width:520px;margin:0 auto}
+h1{color:#fff;font-size:20px;font-weight:800;letter-spacing:1px;margin-bottom:4px}
+.sub{color:#333;font-size:12px;letter-spacing:2px;margin-bottom:24px}
+label{display:block;color:#555;font-size:11px;letter-spacing:2px;margin-bottom:8px}
+input,textarea{width:100%;background:#0e0e0e;border:1px solid #1a1a1a;border-radius:12px;color:#f0ece4;font-size:15px;padding:12px 14px;outline:none;font-family:Georgia,serif;display:block}
+textarea{resize:none;caret-color:#e8735a;margin-bottom:12px}
+.row{display:flex;gap:8px;margin-bottom:16px}
+.row input{margin:0}
+button{border:none;border-radius:12px;font-size:14px;font-weight:700;cursor:pointer;padding:12px 18px}
+#saveBtn{background:#e8735a;color:#fff;white-space:nowrap}
+#launchBtn{width:100%;height:50px;background:#e8735a;color:#fff;font-size:16px;border-radius:14px;margin-bottom:20px}
+#launchBtn:disabled{background:#111;color:#333;cursor:default}
+#keySection{margin-bottom:20px}
+#mainSection{display:none}
+.card{background:#0a0a0a;border:1px solid #111;border-radius:16px;padding:16px;margin-bottom:12px}
+.card-title{font-size:11px;font-weight:800;letter-spacing:3px;margin-bottom:10px}
+.card-body{color:#b0aca8;font-size:15px;line-height:1.8;white-space:pre-wrap;min-height:16px}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+.cur{display:inline-block;width:2px;height:14px;vertical-align:text-bottom;margin-left:2px;animation:blink .7s step-end infinite}
+</style>
 </head>
 <body>
-<div id="app">
-  <div class="header">
-    <div class="logo">
-      <span class="logo-icon">✦</span>
-      <span class="logo-text">KULBATSKII OS</span>
-    </div>
-    <p class="subtitle">3 АГЕНТА · ПАРАЛЛЕЛЬНЫЙ СТРИМИНГ</p>
+
+<h1>✦ KULBATSKII OS</h1>
+<p class="sub">3 АГЕНТА · ПАРАЛЛЕЛЬНЫЙ СТРИМИНГ</p>
+
+<div id="keySection">
+  <label>ANTHROPIC API KEY</label>
+  <div class="row">
+    <input type="password" id="keyInput" placeholder="sk-ant-..."/>
+    <button id="saveBtn" onclick="saveKey()">Сохранить</button>
   </div>
-  <div id="screen"></div>
+  <p style="color:#1e1e1e;font-size:11px">Ключ сохраняется в браузере</p>
+</div>
+
+<div id="mainSection">
+  <textarea id="idea" rows="4" placeholder="Введи идею или задачу…"></textarea>
+  <button id="launchBtn" onclick="launch()">✦ Запустить агентов</button>
+
+  <div class="card">
+    <p class="card-title" style="color:#e8735a">✦ MASTER</p>
+    <p class="card-body" id="out-master"></p>
+  </div>
+  <div class="card">
+    <p class="card-title" style="color:#4caf50">◈ BIZ</p>
+    <p class="card-body" id="out-biz"></p>
+  </div>
+  <div class="card">
+    <p class="card-title" style="color:#e8c07d">◎ MIND</p>
+    <p class="card-body" id="out-mind"></p>
+  </div>
+
+<button onclick="resetKey()" style="background:transparent;color:#1e1e1e;font-size:12px;padding:8px;width:100%;margin-top:8px">Сменить ключ</button>
+
 </div>
 
 <script>
-const AGENTS = [
-  {id:"master",label:"MASTER",emoji:"✦",color:"#e8735a",
-   system:"Ты — Master-агент. Анализируй идею на 3 уровнях: технология, ROI, философия. Вынеси вердикт: Go или Redesign. Отвечай по-русски, до 100 слов."},
-  {id:"biz",label:"BIZ",emoji:"◈",color:"#4caf50",
-   system:"Ты — Biz-агент. Оцени unit-экономику и монетизацию. Назови 2-3 способа заработать на идее. Отвечай по-русски, до 100 слов."},
-  {id:"mind",label:"MIND",emoji:"◎",color:"#e8c07d",
-   system:"Ты — Mind-агент. Найди суть и долгосрочную ценность. Задай главный вопрос, который автор ещё не задал. Отвечай по-русски, до 100 слов."},
-];
-
-let apiKey = localStorage.getItem("ant_key") || "";
-let running = false;
-
-function render(html){ document.getElementById("screen").innerHTML = html; }
-
-function showKeyScreen(){
-  render(`
-    <div class="key-box">
-      <p class="key-label">ANTHROPIC API KEY</p>
-      <div class="key-row">
-        <input type="password" id="keyInput" placeholder="sk-ant-..." value="${apiKey}"/>
-        <button class="btn-save ${apiKey.startsWith('sk-ant')?'active':''}" id="saveBtn" onclick="saveKey()">Сохранить</button>
-      </div>
-      <p class="key-note">Ключ хранится только в localStorage браузера</p>
-    </div>
-  `);
-  document.getElementById("keyInput").addEventListener("input", e => {
-    apiKey = e.target.value;
-    document.getElementById("saveBtn").className = "btn-save " + (apiKey.startsWith("sk-ant")?"active":"");
-  });
-}
+var key = localStorage.getItem("ant_key") || "";
+if(key){ show(); }
 
 function saveKey(){
-  if(!apiKey.startsWith("sk-ant")) return;
-  localStorage.setItem("ant_key", apiKey);
-  showInputScreen();
+  key = document.getElementById("keyInput").value.trim();
+  if(!key){ alert("Введи ключ"); return; }
+  localStorage.setItem("ant_key", key);
+  show();
 }
 
-const HINTS = [
-  "Как превратить AI-контент в SaaS?",
-  "TON-кошельки против банков: бизнес-идея",
-  "Агентная сеть для автоматизации Instagram",
-];
-
-function showInputScreen(){
-  const hints = HINTS.map(h=>`<button class="hint" onclick="setInput(this)">${h}</button>`).join("");
-  render(`
-    <div class="input-box">
-      <textarea id="idea" rows="4" placeholder="Введи идею или задачу…"></textarea>
-
-```
-</div>
-${hints}
-<button class="btn-launch" id="launchBtn" onclick="launch()">
-  <span style="font-size:18px">✦</span> Запустить агентов
-</button>
-<button class="btn-reset" onclick="resetKey()">Сменить API ключ</button>
-```
-
-`);
-document.getElementById(“idea”).addEventListener(“input”, e => {
-document.getElementById(“launchBtn”).className = “btn-launch “ + (e.target.value.trim()?“active”:””);
-});
-}
-
-function setInput(btn){
-document.getElementById(“idea”).value = btn.textContent;
-document.getElementById(“launchBtn”).className = “btn-launch active”;
+function show(){
+  document.getElementById("keySection").style.display = "none";
+  document.getElementById("mainSection").style.display = "block";
 }
 
 function resetKey(){
-localStorage.removeItem(“ant_key”);
-apiKey = “”;
-showKeyScreen();
+  localStorage.removeItem("ant_key");
+  key = "";
+  document.getElementById("keySection").style.display = "block";
+  document.getElementById("mainSection").style.display = "none";
 }
+
+var AGENTS = [
+  {id:"master", color:"#e8735a", system:"Ты — Master-агент. Анализируй идею на 3 уровнях: технология, ROI, философия. Вердикт: Go или Redesign. По-русски, до 100 слов."},
+  {id:"biz",    color:"#4caf50", system:"Ты — Biz-агент. Оцени монетизацию и unit-экономику. 2-3 способа заработать. По-русски, до 100 слов."},
+  {id:"mind",   color:"#e8c07d", system:"Ты — Mind-агент. Найди суть и долгосрочную ценность. Задай главный незаданный вопрос. По-русски, до 100 слов."},
+];
 
 function launch(){
-const msg = (document.getElementById(“idea”)||{}).value?.trim();
-if(!msg || running) return;
-running = true;
-showResultScreen(msg);
+  var msg = document.getElementById("idea").value.trim();
+  if(!msg){ alert("Введи идею"); return; }
+  var btn = document.getElementById("launchBtn");
+  btn.disabled = true; btn.textContent = "Генерация…";
+  AGENTS.forEach(function(a){
+    document.getElementById("out-"+a.id).innerHTML = "<span class='cur' style='background:"+a.color+"'></span>";
+  });
+  var done = 0;
+  AGENTS.forEach(function(agent){
+    stream(agent, msg, function(){
+      done++;
+      if(done===AGENTS.length){ btn.disabled=false; btn.textContent="✦ Запустить агентов"; }
+    });
+  });
 }
 
-function showResultScreen(msg){
-const cards = AGENTS.map(a=>`<div class="card" id="card-${a.id}" style="border-color:#111"> <div class="card-header"> <span class="card-emoji" style="color:${a.color}">${a.emoji}</span> <span class="card-label" style="color:${a.color}">${a.label}</span> <span class="card-dot" id="dot-${a.id}" style="background:${a.color}"></span> </div> <p class="card-text" id="text-${a.id}"></p> </div>`).join(””);
-
-render(`<div class="query-row"> <div class="query-pill"><p class="query-text">${msg}</p></div> <button class="btn-new" onclick="newQuery()">← Новая</button> </div> <div class="cards">${cards}</div>`);
-
-let done = 0;
-AGENTS.forEach(agent => {
-streamAgent(agent, msg, apiKey,
-text => {
-const el = document.getElementById(“text-”+agent.id);
-if(el) el.innerHTML = text + `<span class="cursor" style="background:${agent.color}"></span>`;
-const card = document.getElementById(“card-”+agent.id);
-if(card) card.style.borderColor = agent.color+“22”;
-},
-() => {
-const dot = document.getElementById(“dot-”+agent.id);
-if(dot) dot.remove();
-const el = document.getElementById(“text-”+agent.id);
-if(el){ const c = el.querySelector(”.cursor”); if(c) c.remove(); }
-const card = document.getElementById(“card-”+agent.id);
-if(card) card.style.borderColor = agent.color+“44”;
-done++;
-if(done === AGENTS.length) running = false;
+function stream(agent, msg, onDone){
+  fetch("https://api.anthropic.com/v1/messages",{
+    method:"POST",
+    headers:{"Content-Type":"application/json","x-api-key":key,"anthropic-version":"2023-06-01"},
+    body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:300,stream:true,system:agent.system,messages:[{role:"user",content:msg}]})
+  }).then(function(res){
+    var reader = res.body.getReader();
+    var dec = new TextDecoder();
+    var full="", buf="";
+    function read(){
+      reader.read().then(function(r){
+        if(r.done){ onDone(); return; }
+        buf += dec.decode(r.value,{stream:true});
+        var lines = buf.split("\n"); buf = lines.pop()||"";
+        lines.forEach(function(line){
+          if(!line.startsWith("data: ")) return;
+          var raw = line.slice(6).trim();
+          if(raw==="[DONE]") return;
+          try{
+            var evt = JSON.parse(raw);
+            var t = (evt.delta&&evt.delta.text)||"";
+            if(t){
+              full+=t;
+              var el = document.getElementById("out-"+agent.id);
+              if(el) el.innerHTML = full + "<span class='cur' style='background:"+agent.color+"'></span>";
+            }
+          }catch(e){}
+        });
+        read();
+      });
+    }
+    read();
+  }).catch(function(e){
+    var el = document.getElementById("out-"+agent.id);
+    if(el) el.textContent = "Ошибка: "+e.message;
+    onDone();
+  });
 }
-);
-});
-}
-
-function newQuery(){
-running = false;
-showInputScreen();
-}
-
-async function streamAgent(agent, message, key, onChunk, onDone){
-try {
-const res = await fetch(“https://api.anthropic.com/v1/messages”,{
-method:“POST”,
-headers:{
-“Content-Type”:“application/json”,
-“x-api-key”: key,
-“anthropic-version”:“2023-06-01”,
-},
-body: JSON.stringify({
-model:“claude-sonnet-4-20250514”,
-max_tokens:300,
-stream:true,
-system: agent.system,
-messages:[{role:“user”,content:message}],
-}),
-});
-const reader = res.body.getReader();
-const dec = new TextDecoder();
-let full=””, buf=””;
-while(true){
-const {done,value} = await reader.read();
-if(done) break;
-buf += dec.decode(value,{stream:true});
-const lines = buf.split(”\n”);
-buf = lines.pop()??””;
-for(const line of lines){
-if(!line.startsWith(“data: “)) continue;
-const raw = line.slice(6).trim();
-if(raw===”[DONE]”) continue;
-try{
-const evt = JSON.parse(raw);
-const text = evt?.delta?.text??””;
-if(text){ full+=text; onChunk(full); }
-}catch{}
-}
-}
-onDone(full);
-} catch(e){
-onChunk(“Ошибка: “+e.message);
-onDone();
-}
-}
-
-// Init
-if(apiKey.startsWith(“sk-ant”)){ showInputScreen(); } else { showKeyScreen(); }
 </script>
 
 </body>
