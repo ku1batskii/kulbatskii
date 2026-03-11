@@ -2,181 +2,249 @@
 
 <html lang="ru">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>KULBATSKII OS</title>
-<style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{background:#060606;color:#f0ece4;font-family:Georgia,serif;min-height:100vh}
-#app{max-width:500px;margin:0 auto;padding:24px 16px 60px}
-.logo{display:flex;align-items:center;gap:10px;margin-bottom:4px}
-.logo span:first-child{color:#e8735a;font-size:22px}
-.logo span:last-child{color:#fff;font-size:18px;font-weight:800;letter-spacing:1px}
-.sub{color:#2a2a2a;font-size:11px;letter-spacing:2px;margin-bottom:28px}
-textarea{width:100%;background:#0e0e0e;border:1px solid #1a1a1a;border-radius:14px;color:#f0ece4;font-size:16px;padding:14px;outline:none;font-family:Georgia,serif;resize:none;caret-color:#e8735a;display:block;margin-bottom:12px}
-.hints{margin-bottom:16px}
-.hint{display:block;width:100%;text-align:left;background:transparent;border:1px solid #111;border-radius:12px;padding:10px 14px;color:#333;font-size:14px;cursor:pointer;font-family:Georgia,serif;line-height:1.5;margin-bottom:7px}
-.hint:hover{border-color:#222;color:#555}
-#launchBtn{width:100%;height:52px;border:none;border-radius:14px;font-size:16px;font-weight:800;cursor:pointer;background:#111;color:#222;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:24px}
-#launchBtn.on{background:linear-gradient(135deg,#e8735a,#c4502a);color:#fff;box-shadow:0 4px 24px rgba(232,115,90,.3)}
-#launchBtn:disabled{background:#111;color:#222;cursor:default;box-shadow:none}
-.cards{display:flex;flex-direction:column;gap:12px}
-.card{background:#0a0a0a;border:1px solid #111;border-radius:16px;padding:18px;transition:border-color .4s}
-.card-head{display:flex;align-items:center;gap:8px;margin-bottom:12px}
-.card-emoji{font-size:18px}
-.card-name{font-size:11px;font-weight:800;letter-spacing:3px}
-.dot{width:6px;height:6px;border-radius:3px;display:inline-block;margin-left:4px;animation:pulse 1s ease-in-out infinite}
-.done-mark{color:#222;font-size:10px;margin-left:auto}
-.card-text{color:#b0aca8;font-size:15px;line-height:1.8;white-space:pre-wrap;min-height:18px}
-.cur{display:inline-block;width:2px;height:14px;vertical-align:text-bottom;margin-left:2px;animation:blink .7s step-end infinite}
-.new-btn{display:flex;justify-content:center;margin-top:20px}
-.new-btn button{background:transparent;border:1px solid #1a1a1a;border-radius:12px;color:#333;font-size:13px;padding:10px 20px;cursor:pointer}
-@keyframes pulse{0%,100%{opacity:.3}50%{opacity:1}}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KULBATSKII OS</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #060606; font-family: Georgia, serif; }
+    @keyframes pulse { 0%,100%{opacity:.3} 50%{opacity:1} }
+    @keyframes blink  { 0%,100%{opacity:1} 50%{opacity:0} }
+    @keyframes fadeUp { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:none} }
+    ::-webkit-scrollbar { display: none; }
+    textarea { caret-color: #e8735a; resize: none; }
+  </style>
 </head>
 <body>
-<div id="app">
-  <div class="logo"><span>✦</span><span>KULBATSKII OS</span></div>
-  <p class="sub">3 АГЕНТА · ПАРАЛЛЕЛЬНЫЙ СТРИМИНГ</p>
+  <div id="root"></div>
 
-  <div id="inputSection">
-    <textarea id="idea" rows="4" placeholder="Введи идею или задачу…" oninput="onInput()"></textarea>
-    <div class="hints">
-      <button class="hint" onclick="setIdea(this)">Как превратить AI-контент в SaaS?</button>
-      <button class="hint" onclick="setIdea(this)">TON-кошельки против банков: бизнес-идея</button>
-      <button class="hint" onclick="setIdea(this)">Агентная сеть для автоматизации Instagram</button>
-    </div>
-    <button id="launchBtn" onclick="launch()" disabled>✦ Запустить агентов</button>
-  </div>
+  <script type="text/babel">
+    const { useState, useRef } = React;
 
-  <div id="resultSection" style="display:none">
-    <div class="cards">
-      <div class="card" id="card-master">
-        <div class="card-head">
-          <span class="card-emoji" style="color:#e8735a">✦</span>
-          <span class="card-name" style="color:#e8735a">MASTER</span>
-          <span class="dot" id="dot-master" style="background:#e8735a"></span>
-        </div>
-        <p class="card-text" id="text-master"></p>
-      </div>
-      <div class="card" id="card-biz">
-        <div class="card-head">
-          <span class="card-emoji" style="color:#4caf50">◈</span>
-          <span class="card-name" style="color:#4caf50">BIZ</span>
-          <span class="dot" id="dot-biz" style="background:#4caf50"></span>
-        </div>
-        <p class="card-text" id="text-biz"></p>
-      </div>
-      <div class="card" id="card-mind">
-        <div class="card-head">
-          <span class="card-emoji" style="color:#e8c07d">◎</span>
-          <span class="card-name" style="color:#e8c07d">MIND</span>
-          <span class="dot" id="dot-mind" style="background:#e8c07d"></span>
-        </div>
-        <p class="card-text" id="text-mind"></p>
-      </div>
-    </div>
-    <div class="new-btn"><button onclick="reset()">← Новая идея</button></div>
-  </div>
-</div>
+    const AGENTS = [
+      { id:"master", label:"Master", emoji:"✦", color:"#e8735a",
+        system:"Ты — Master-агент. Анализируй идею на 3 уровнях: технология, ROI, философия. Вынеси вердикт: Go или Redesign. Отвечай по-русски, до 100 слов." },
+      { id:"biz",    label:"Biz",    emoji:"◈", color:"#4caf50",
+        system:"Ты — Biz-агент. Оцени unit-экономику и монетизацию. Назови 2-3 способа заработать на идее. Отвечай по-русски, до 100 слов." },
+      { id:"mind",   label:"Mind",   emoji:"◎", color:"#e8c07d",
+        system:"Ты — Mind-агент. Найди суть и долгосрочную ценность. Задай главный вопрос, который автор ещё не задал. Отвечай по-русски, до 100 слов." },
+    ];
 
-<script>
-var AGENTS = [
-  {id:"master", color:"#e8735a", system:"Ты — Master-агент. Анализируй идею на 3 уровнях: технология, ROI, философия. Вынеси вердикт: Go или Redesign. Отвечай по-русски, до 100 слов."},
-  {id:"biz",    color:"#4caf50", system:"Ты — Biz-агент. Оцени unit-экономику и монетизацию. Назови 2-3 способа заработать на этой идее. Отвечай по-русски, до 100 слов."},
-  {id:"mind",   color:"#e8c07d", system:"Ты — Mind-агент. Найди суть и долгосрочную ценность идеи. Задай главный вопрос, который автор ещё не задал себе. Отвечай по-русски, до 100 слов."},
-];
-
-function onInput(){
-  var v = document.getElementById("idea").value.trim();
-  var btn = document.getElementById("launchBtn");
-  btn.disabled = !v;
-  btn.className = v ? "on" : "";
-}
-
-function setIdea(btn){
-  document.getElementById("idea").value = btn.textContent;
-  onInput();
-}
-
-function reset(){
-  document.getElementById("resultSection").style.display = "none";
-  document.getElementById("inputSection").style.display = "block";
-  AGENTS.forEach(function(a){
-    document.getElementById("text-"+a.id).innerHTML = "";
-    document.getElementById("dot-"+a.id).style.display = "inline-block";
-    document.getElementById("card-"+a.id).style.borderColor = "#111";
-  });
-}
-
-function launch(){
-  var msg = document.getElementById("idea").value.trim();
-  if(!msg) return;
-  document.getElementById("inputSection").style.display = "none";
-  document.getElementById("resultSection").style.display = "block";
-
-  var done = 0;
-  AGENTS.forEach(function(agent){
-    stream(agent, msg, function(){
-      done++;
-    });
-  });
-}
-
-function stream(agent, msg, onDone){
-  fetch("/api/chat", {
-    method: "POST",
-    headers: {"Content-Type":"application/json"},
-    body: JSON.stringify({
-      system: agent.system,
-      messages: [{role:"user", content:msg}]
-    })
-  }).then(function(res){
-    var reader = res.body.getReader();
-    var dec = new TextDecoder();
-    var full = "", buf = "";
-
-    function read(){
-      reader.read().then(function(r){
-        if(r.done){
-          var dot = document.getElementById("dot-"+agent.id);
-          if(dot) dot.style.display = "none";
-          var el = document.getElementById("text-"+agent.id);
-          if(el){ var c = el.querySelector(".cur"); if(c) c.remove(); }
-          var card = document.getElementById("card-"+agent.id);
-          if(card) card.style.borderColor = agent.color+"44";
-          onDone();
-          return;
-        }
-        buf += dec.decode(r.value, {stream:true});
-        var lines = buf.split("\n");
-        buf = lines.pop() || "";
-        lines.forEach(function(line){
-          if(!line.startsWith("data: ")) return;
-          var raw = line.slice(6).trim();
-          if(raw === "[DONE]") return;
-          try{
-            var evt = JSON.parse(raw);
-            var t = (evt.delta && evt.delta.text) || "";
-            if(t){
-              full += t;
-              var el = document.getElementById("text-"+agent.id);
-              if(el) el.innerHTML = full + '<span class="cur" style="background:'+agent.color+'"></span>';
-            }
-          }catch(e){}
+    async function streamAgent(agent, message, apiKey, onChunk, onDone) {
+      try {
+        const res = await fetch("https://api.anthropic.com/v1/messages", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "x-api-key": apiKey,
+            "anthropic-version": "2023-06-01",
+          },
+          body: JSON.stringify({
+            model: "claude-sonnet-4-20250514",
+            max_tokens: 300,
+            stream: true,
+            system: agent.system,
+            messages: [{ role:"user", content:message }],
+          }),
         });
-        read();
-      }).catch(function(e){ onDone(); });
+
+        const reader = res.body.getReader();
+        const dec = new TextDecoder();
+        let full = "", buf = "";
+
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          buf += dec.decode(value, { stream: true });
+          const lines = buf.split("\n");
+          buf = lines.pop() ?? "";
+          for (const line of lines) {
+            if (!line.startsWith("data: ")) continue;
+            const raw = line.slice(6).trim();
+            if (raw === "[DONE]") continue;
+            try {
+              const evt = JSON.parse(raw);
+              const text = evt?.delta?.text ?? "";
+              if (text) { full += text; onChunk(full); }
+            } catch {}
+          }
+        }
+        onDone(full);
+      } catch (e) {
+        const msg = "Ошибка: " + e.message;
+        onChunk(msg); onDone(msg);
+      }
     }
-    read();
-  }).catch(function(e){
-    var el = document.getElementById("text-"+agent.id);
-    if(el) el.textContent = "Ошибка: " + e.message;
-    onDone();
-  });
-}
-</script>
+
+    function AgentCard({ agent, text, done, running }) {
+      return (
+        <div style={{ background:"#0a0a0a", border:`1px solid ${done ? agent.color+"44" : "#111"}`,
+          borderRadius:18, padding:"18px 18px 20px", transition:"border-color .4s" }}>
+          <div style={{ display:"flex", alignItems:"center", gap:8, marginBottom:12 }}>
+            <span style={{ color:agent.color, fontSize:20 }}>{agent.emoji}</span>
+            <span style={{ color:agent.color, fontSize:11, fontWeight:800, letterSpacing:3 }}>{agent.label.toUpperCase()}</span>
+            {running && !done && <span style={{ width:6, height:6, borderRadius:3, background:agent.color,
+              display:"inline-block", animation:"pulse 1s ease-in-out infinite", marginLeft:4 }}/>}
+            {done && <span style={{ color:"#222", fontSize:10, marginLeft:"auto" }}>✓ готово</span>}
+          </div>
+          <p style={{ color:"#b8b4ac", fontSize:15, lineHeight:1.8, whiteSpace:"pre-wrap", minHeight:20 }}>
+            {text}
+            {running && !done && text && <span style={{ display:"inline-block", width:2, height:14,
+              background:agent.color, verticalAlign:"text-bottom", marginLeft:2, animation:"blink .7s step-end infinite" }}/>}
+          </p>
+        </div>
+      );
+    }
+
+    function App() {
+      const [apiKey, setApiKey]     = useState(localStorage.getItem("ant_key") || "");
+      const [keySaved, setKeySaved] = useState(!!localStorage.getItem("ant_key"));
+      const [input, setInput]       = useState("");
+      const [texts, setTexts]       = useState({});
+      const [dones, setDones]       = useState({});
+      const [running, setRunning]   = useState(false);
+      const [submitted, setSubmitted] = useState("");
+      const doneCount = useRef(0);
+
+      const saveKey = () => {
+        localStorage.setItem("ant_key", apiKey);
+        setKeySaved(true);
+      };
+
+      const launch = () => {
+        if (!input.trim() || running || !apiKey) return;
+        const msg = input.trim();
+        setSubmitted(msg); setTexts({}); setDones({});
+        setRunning(true); doneCount.current = 0;
+
+        AGENTS.forEach(agent => {
+          streamAgent(agent, msg, apiKey,
+            text => setTexts(prev => ({ ...prev, [agent.id]: text })),
+            () => {
+              setDones(prev => ({ ...prev, [agent.id]: true }));
+              doneCount.current++;
+              if (doneCount.current === AGENTS.length) setRunning(false);
+            }
+          );
+        });
+      };
+
+      const anyOutput = Object.keys(texts).length > 0;
+
+      return (
+        <div style={{ background:"#060606", minHeight:"100vh", padding:"28px 18px 48px",
+          maxWidth:520, margin:"0 auto" }}>
+
+          {/* Header */}
+          <div style={{ marginBottom:28 }}>
+            <div style={{ display:"flex", alignItems:"center", gap:10, marginBottom:6 }}>
+              <span style={{ color:"#e8735a", fontSize:24 }}>✦</span>
+              <span style={{ color:"#fff", fontSize:20, fontWeight:800, letterSpacing:1 }}>KULBATSKII OS</span>
+            </div>
+            <p style={{ color:"#2a2a2a", fontSize:12, letterSpacing:2 }}>3 АГЕНТА · ПАРАЛЛЕЛЬНЫЙ СТРИМИНГ</p>
+          </div>
+
+          {/* API Key */}
+          {!keySaved && (
+            <div style={{ background:"#0a0a0a", border:"1px solid #1a1a1a", borderRadius:16,
+              padding:18, marginBottom:20 }}>
+              <p style={{ color:"#444", fontSize:12, letterSpacing:2, marginBottom:10 }}>ANTHROPIC API KEY</p>
+              <div style={{ display:"flex", gap:8 }}>
+                <input type="password" value={apiKey}
+                  onChange={e => setApiKey(e.target.value)}
+                  placeholder="sk-ant-..."
+                  style={{ flex:1, background:"#111", border:"1px solid #1e1e1e", borderRadius:10,
+                    color:"#f0ece4", fontSize:14, padding:"10px 12px", outline:"none" }}
+                />
+                <button onClick={saveKey} disabled={!apiKey.startsWith("sk-ant")}
+                  style={{ padding:"10px 16px", background:apiKey.startsWith("sk-ant")?"#e8735a":"#111",
+                    border:"none", borderRadius:10, color:apiKey.startsWith("sk-ant")?"#fff":"#333",
+                    fontSize:13, fontWeight:700, cursor:"pointer" }}>
+                  Сохранить
+                </button>
+              </div>
+              <p style={{ color:"#1a1a1a", fontSize:11, marginTop:8 }}>
+                Ключ хранится только в localStorage твоего браузера
+              </p>
+            </div>
+          )}
+
+          {keySaved && !anyOutput && (
+            <div style={{ animation:"fadeUp .4s cubic-bezier(.16,1,.3,1)" }}>
+              <div style={{ background:"#0e0e0e", border:"1px solid #1a1a1a", borderRadius:18,
+                padding:"14px 16px", marginBottom:12 }}>
+                <textarea value={input} rows={4}
+                  onChange={e => setInput(e.target.value)}
+                  onKeyDown={e => { if (e.key==="Enter" && e.metaKey) launch(); }}
+                  placeholder="Введи идею или задачу…"
+                  style={{ width:"100%", background:"transparent", border:"none", outline:"none",
+                    color:"#f0ece4", fontSize:16, lineHeight:1.75, fontFamily:"Georgia,serif" }}
+                />
+              </div>
+
+              {["Как превратить AI-контент в SaaS?",
+                "TON-кошельки против банков: бизнес-идея",
+                "Агентная сеть для автоматизации Instagram"
+              ].map((h,i) => (
+                <button key={i} onClick={() => setInput(h)}
+                  style={{ display:"block", width:"100%", textAlign:"left", background:"transparent",
+                    border:"1px solid #111", borderRadius:12, padding:"10px 14px", color:"#333",
+                    fontSize:14, cursor:"pointer", fontFamily:"Georgia,serif", lineHeight:1.5,
+                    marginBottom:8 }}>
+                  {h}
+                </button>
+              ))}
+
+              <button onClick={launch} disabled={!input.trim()}
+                style={{ width:"100%", height:52, border:"none", borderRadius:16, marginTop:6,
+                  background:input.trim()?"linear-gradient(135deg,#e8735a,#c4502a)":"#0e0e0e",
+                  color:input.trim()?"#fff":"#222", fontSize:16, fontWeight:800,
+                  cursor:input.trim()?"pointer":"default",
+                  boxShadow:input.trim()?"0 4px 24px rgba(232,115,90,.3)":"none",
+                  display:"flex", alignItems:"center", justifyContent:"center", gap:10 }}>
+                <span style={{ fontSize:18 }}>✦</span> Запустить агентов
+              </button>
+
+              <button onClick={() => { setKeySaved(false); localStorage.removeItem("ant_key"); }}
+                style={{ width:"100%", marginTop:10, padding:"8px", background:"transparent",
+                  border:"none", color:"#1e1e1e", fontSize:12, cursor:"pointer" }}>
+                Сменить API ключ
+              </button>
+            </div>
+          )}
+
+          {anyOutput && (
+            <div style={{ animation:"fadeUp .3s cubic-bezier(.16,1,.3,1)" }}>
+              <div style={{ display:"flex", gap:10, marginBottom:20 }}>
+                <div style={{ flex:1, background:"#0a0a0a", border:"1px solid #111", borderRadius:12,
+                  padding:"8px 14px", overflow:"hidden" }}>
+                  <p style={{ color:"#333", fontSize:13, whiteSpace:"nowrap", overflow:"hidden",
+                    textOverflow:"ellipsis", fontFamily:"Georgia,serif" }}>{submitted}</p>
+                </div>
+                <button onClick={() => { setTexts({}); setDones({}); setSubmitted(""); setInput(""); }}
+                  style={{ padding:"8px 14px", background:"#0e0e0e", border:"1px solid #111",
+                    borderRadius:12, color:"#444", fontSize:13, cursor:"pointer" }}>
+                  ← Новая
+                </button>
+              </div>
+
+              <div style={{ display:"flex", flexDirection:"column", gap:12 }}>
+                {AGENTS.map(agent => (
+                  <AgentCard key={agent.id} agent={agent}
+                    text={texts[agent.id]||""} done={!!dones[agent.id]} running={running} />
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+  </script>
 
 </body>
 </html>
